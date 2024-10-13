@@ -9,6 +9,7 @@ import Match from "./scenes/domain/match";
 import Guest from "./scenes/domain/guest";
 import Invoices from "./scenes/invoices";
 import Contacts from "./scenes/contacts";
+import ConClub from "./scenes/contacts/conClub";
 import Bar from "./scenes/bar";
 import Form from "./scenes/form";
 import Line from "./scenes/line";
@@ -33,11 +34,12 @@ function App() {
             <Topbar setIsSidebar={setIsSidebar} />
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/user" element={<User />} />
-              <Route path="/club" element={<Club />} />
-              <Route path="/match" element={<Match />} />
-              <Route path="/guest" element={<Guest />} />
+              <Route path="/domain/user" element={<User />} />
+              <Route path="/domain/club" element={<Club />} />
+              <Route path="/domain/match" element={<Match />} />
+              <Route path="/domain/guest" element={<Guest />} />
               <Route path="/contacts" element={<Contacts />} />
+              <Route path="/contacts/conClub" element={<ConClub />} />
               <Route path="/invoices" element={<Invoices />} />
               <Route path="/form" element={<Form />} />
               <Route path="/bar" element={<Bar />} />

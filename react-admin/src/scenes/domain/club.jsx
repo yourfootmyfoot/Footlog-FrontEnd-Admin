@@ -1,7 +1,8 @@
 import { Box, Typography, useTheme } from "@mui/material"; // MUI의 Box, Typography, useTheme 훅을 임포트
 import { DataGrid } from "@mui/x-data-grid"; // DataGrid는 MUI의 테이블을 쉽게 구현할 수 있는 컴포넌트
 import { tokens } from "../../theme"; // theme.js 파일에서 가져온 tokens로 테마 색상 사용
-import { mockDataTeam } from "../../data/mockData"; // mock 데이터 (팀원 정보)를 불러옴
+import { useEffect, useState } from "react"; // React의 useEffect 및 useState 훅 임포트
+import axios from "axios"; // axios를 사용하여 API 요청 처리
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined"; // 관리자 아이콘
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined"; // 일반 유저 아이콘
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined"; // 매니저 아이콘
@@ -11,39 +12,55 @@ import Header from "../../components/Header"; // 페이지의 제목과 부제�
 const Team = () => {
   const theme = useTheme(); // MUI 테마 훅을 사용하여 현재 테마 정보를 가져옴
   const colors = tokens(theme.palette.mode); // 테마 모드 (다크/라이트)에 따라 colors 정의
+  const [teams, setTeams] = useState([]); // 팀 데이터를 저장할 상태 추가
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
-  // DataGrid의 컬럼 정의: 테이블에서 각 열이 어떻게 표시될지 설정
+  // 팀 데이터를 가져오는 useEffect 훅
+  useEffect(() => {
+    const fetchTeams = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/guests'); // API 호출하여 구단 정보 가져오기
+        setTeams(response.data); // 응답 데이터로 상태 업데이트
+      } catch (error) {
+        console.error("팀 데이터를 가져오는 데 오류가 발생했습니다:", error); // 오류 발생 시 콘솔에 에러 메시지 출력
+      } finally {
+        setLoading(false); // 로딩 상태 종료
+      }
+    };
+    fetchTeams(); // 데이터 가져오기 함수 호출
+  }, []); // 컴포넌트가 처음 마운트될 때 한 번 호출
+
+  // DataGrid의 컬럼 정의
   const columns = [
-    { field: "id", headerName: "ID" }, // ID 필드
+    { field: "club_id", headerName: "Id" }, // ID 필드
     {
-      field: "name", 
+      field: "club_name",
       headerName: "Name", // 이름 필드
       flex: 1, // flex 값을 사용하여 이 열이 화면에서 더 많은 공간을 차지하도록 설정
-      cellClassName: "name-column--cell", // 셀에 특정 CSS 클래스 이름 추가 (이 클래스는 아래 스타일 섹션에서 정의)
+      cellClassName: "name-column--cell", // 셀에 특정 CSS 클래스 이름 추가
     },
     {
-      field: "age",
-      headerName: "Age", // 나이 필드
+      field: "player_quantity",
+      headerName: "Player Quantity", // 플레이어 수 필드
       type: "number", // 숫자 타입으로 지정
       headerAlign: "left", // 헤더 텍스트 정렬: 왼쪽
       align: "left", // 셀 내용 정렬: 왼쪽
     },
     {
-      field: "phone",
-      headerName: "Phone Number", // 전화번호 필드
-      flex: 1, // flex 값을 사용하여 열의 크기 유연하게 조정
+      field: "club_age",
+      headerName: "Age", // 구단 나이 필드
+      flex: 1, // 열의 크기 유연하게 조정
     },
     {
-      field: "email",
-      headerName: "Email", // 이메일 필드
-      flex: 1, // flex 값을 사용하여 열의 크기 유연하게 조정
+      field: "club_level",
+      headerName: "Level", // 구단 레벨 필드
+      flex: 1, // 열의 크기 유연하게 조정
     },
     {
       field: "accessLevel",
       headerName: "Access Level", // 권한 수준 필드
-      flex: 1, // flex 값을 사용하여 열의 크기 유연하게 조정
-      // renderCell: 각 셀을 커스텀 렌더링 (accessLevel에 따라 아이콘과 배경색 다르게 설정)
-      renderCell: ({ row: { access } }) => {
+      flex: 1, // 열의 크기 유연하게 조정
+      renderCell: ({ row: { access } }) => { // 각 셀을 커스텀 렌더링
         return (
           <Box
             width="60%" // 셀 너비
@@ -73,6 +90,11 @@ const Team = () => {
       },
     },
   ];
+
+  // 로딩 중일 때의 처리
+  if (loading) {
+    return <Typography>Loading...</Typography>; // 로딩 중일 경우 텍스트 표시
+  }
 
   // Team 컴포넌트의 JSX 리턴 부분
   return (
@@ -108,11 +130,11 @@ const Team = () => {
         }}
       >
         {/* DataGrid 컴포넌트: 테이블 렌더링 */}
-        <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} /> 
+        <DataGrid checkboxSelection rows={teams} columns={columns} /> 
         {/* checkboxSelection: 각 행에 체크박스 추가 */}
       </Box>
     </Box>
   );
 };
 
-export default Team;
+export default Team; // Team 컴포넌트를 기본으로 내보냄

@@ -5,8 +5,8 @@ import { mockDataContacts } from "../../data/mockData"; // mock 데이터 (연�
 import Header from "../../components/Header"; // 페이지 제목과 부제목을 보여주는 Header 컴포넌트를 임포트
 import { useTheme } from "@mui/material"; // MUI의 useTheme 훅을 임포트
 
-// Contacts 컴포넌트: 연락처 데이터를 테이블로 보여주는 컴포넌트
-const Contacts = () => {
+// ConClub 컴포넌트: 연락처 데이터를 테이블로 보여주는 컴포넌트
+const ConClub = () => {
   const theme = useTheme(); // 현재 MUI 테마를 가져옴
   const colors = tokens(theme.palette.mode); // 현재 테마 모드에 따른 색상 설정
 
@@ -103,4 +103,4 @@ const Contacts = () => {
   );
 };
 
-export default Contacts; // Contacts 컴포넌트를 기본 내보내기로 설정
+export default ConClub; // ConClub 컴포넌트를 기본 내보내기로 설정

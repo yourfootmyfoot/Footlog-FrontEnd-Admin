@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
-import { Box, IconButton, Typography, useTheme } from "@mui/material";
-import { Link } from "react-router-dom";
-import 'react-pro-sidebar/dist/css/styles.css';
-import { tokens } from "../../theme";
+import { useState } from "react"; // useState 훅을 불러옴
+import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar"; // ProSidebar와 Menu 컴포넌트를 불러옴
+import { Box, IconButton, Typography, useTheme } from "@mui/material"; // MUI 컴포넌트와 테마 훅을 불러옴
+import { Link } from "react-router-dom"; // 라우팅을 위한 Link 컴포넌트를 불러옴
+import 'react-pro-sidebar/dist/css/styles.css'; // react-pro-sidebar의 스타일을 불러옴
+import { tokens } from "../../theme"; // 테마 색상 토큰을 불러옴
+// 아이콘
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
@@ -20,17 +21,18 @@ import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
   return (
     <MenuItem
-      active={selected === title}
+      active={selected === title} // 현재 선택된 항목을 기반으로 활성화 여부 결정
       style={{
-        color: colors.grey[100],
+        color: colors.grey[100], // 메뉴 아이템의 색상 설정
       }}
-      onClick={() => setSelected(title)}
-      icon={icon}
+      onClick={() => setSelected(title)} // 클릭 시 선택된 항목을 업데이트
+      icon={icon} // 메뉴 아이템 아이콘 설정
     >
-      <Typography>{title}</Typography>
-      <Link to={to} />
+      <Typography>{title}</Typography> {/* 메뉴 항목 제목 */}
+      <Link to={to} /> {/* 클릭 시 이동할 링크 설정 */}
     </MenuItem>
   );
 };
@@ -132,6 +134,8 @@ const Sidebar = () => {
             >
               Data
             </Typography>
+
+            {/* domain */}
             <Item
               title="User"
               to="/domain/user"
@@ -160,6 +164,9 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+            
+            {/* Contacts domain */}
+
             <Item
               title="Contacts Information"
               to="/contacts"
@@ -167,6 +174,14 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+            <Item
+              title="ContactsClub"
+              to="/contacts/conClub"
+              icon={<ContactsOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
             <Item
               title="Invoices Balances"
               to="/invoices"
