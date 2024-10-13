@@ -7,6 +7,18 @@ import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettin
 import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined"; // 일반 유저 아이콘
 import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined"; // 매니저 아이콘
 import Header from "../../components/Header"; // 페이지의 제목과 부제목을 보여주는 Header 컴포넌트
+import Cookies from 'js-cookie'; // js-cookie 라이브러리 임포트
+
+
+/*
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`; // 현재 쿠키를 문자열로 가져옴
+  const parts = value.split(`; ${name}=`); // 이름으로 쿠키를 찾기 위해 분할
+  if (parts.length === 2) return parts.pop().split(';').shift(); // 쿠키 값 반환
+};
+*/
+
+
 
 // Team 컴포넌트: 팀 데이터를 테이블로 보여주는 컴포넌트
 const Team = () => {
@@ -15,11 +27,23 @@ const Team = () => {
   const [teams, setTeams] = useState([]); // 팀 데이터를 저장할 상태 추가
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
+
   // 팀 데이터를 가져오는 useEffect 훅
   useEffect(() => {
     const fetchTeams = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/guests'); // API 호출하여 구단 정보 가져오기
+        // const token = getCookie('accessToken');
+        // console.log("token: " + token);
+        console.log("afasdfadf")
+        
+        const token = Cookies.get('accessToken'); // 'accessToken'이라는 이름의 쿠키 가져오기
+        console.log("token : " + token);
+
+        const response = await axios.get('http://localhost:8080/api/clubs', { // API 호출하여 구단 정보 가져오기
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setTeams(response.data); // 응답 데이터로 상태 업데이트
       } catch (error) {
         console.error("팀 데이터를 가져오는 데 오류가 발생했습니다:", error); // 오류 발생 시 콘솔에 에러 메시지 출력
@@ -72,17 +96,17 @@ const Team = () => {
               access === "admin"
                 ? colors.greenAccent[600] // 관리자는 greenAccent 색상
                 : access === "manager"
-                ? colors.greenAccent[700] // 매니저는 조금 더 어두운 greenAccent 색상
-                : colors.greenAccent[700] // 일반 유저도 동일한 색상
+                  ? colors.greenAccent[700] // 매니저는 조금 더 어두운 greenAccent 색상
+                  : colors.greenAccent[700] // 일반 유저도 동일한 색상
             }
             borderRadius="4px" // 모서리를 둥글게 만듦
           >
             {/* access 값에 따라 다른 아이콘을 표시 */}
-            {access === "admin" && <AdminPanelSettingsOutlinedIcon />} 
-            {access === "manager" && <SecurityOutlinedIcon />} 
-            {access === "user" && <LockOpenOutlinedIcon />} 
+            {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
+            {access === "manager" && <SecurityOutlinedIcon />}
+            {access === "user" && <LockOpenOutlinedIcon />}
             {/* access 텍스트를 표시, 색상은 테마의 grey[100] 사용 */}
-            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}> 
+            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
               {access} {/* access 값 출력 */}
             </Typography>
           </Box>
@@ -130,7 +154,7 @@ const Team = () => {
         }}
       >
         {/* DataGrid 컴포넌트: 테이블 렌더링 */}
-        <DataGrid checkboxSelection rows={teams} columns={columns} /> 
+        <DataGrid checkboxSelection rows={teams} columns={columns} />
         {/* checkboxSelection: 각 행에 체크박스 추가 */}
       </Box>
     </Box>
