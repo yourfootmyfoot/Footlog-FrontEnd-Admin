@@ -52,10 +52,10 @@ const Guest = () => {
 
   // DataGrid의 컬럼 정의
   const columns = [
-    { field: "guestId", headerName: "Id" },
+    { field: "guestId", headerName: "guestId" },
     {
-      field: "clubName",
-      headerName: "hostClub",
+      field: "memberId",
+      headerName: "memberId",
       flex: 1,
       cellClassName: "name-column--cell",
       // myClub.clubName을 표시
@@ -64,8 +64,8 @@ const Guest = () => {
       },
     },
     {
-      field: "enemyClub",
-      headerName: "guestClub",
+      field: "location",
+      headerName: "location",
       flex: 1,
       // enemyClub.clubName을 표시
       renderCell: (params) => {
@@ -73,18 +73,15 @@ const Guest = () => {
       },
     },
     {
-      field: "fieldLocation",
-      headerName: "field", // Match 나이 필드
+      field: "age",
+      headerName: "age", // Match 나이 필드
       flex: 1, // 열의 크기 유연하게 조정
     },
     {
-      field: "schedule",
-      headerName: "Schedule & Quarters", // 일정 및 쿼터 수
+      field: "scheduleDate",
+      headerName: "scheduleDate", // 일정 및 쿼터 수
       flex: 1.5,
-      renderCell: (params) => {
-        const { matchSchedule, quarterQuantity } = params.row; // matchSchedule 및 quarterQuantity 값 가져오기
-        return `${matchSchedule.matchDate} ${matchSchedule.matchStartTime}-${matchSchedule.matchEndTime} | ${quarterQuantity}`;
-      },
+      flex: 1, // 열의 크기 유연하게 조정
     },
     {
       field: "matchCost",

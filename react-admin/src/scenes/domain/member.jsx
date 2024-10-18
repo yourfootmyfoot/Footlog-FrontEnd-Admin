@@ -4,21 +4,21 @@ import { tokens } from "../../theme";
 import { useEffect, useState } from "react"; // React의 useEffect 및 useState 훅 임포트
 import axios from "axios"; // axios를 사용하여 API 요청 처리
 import Header from "../../components/Header";
-import { getUserList } from './apis/userAPI';
+import { getMemberList } from './apis/memberAPI';
 
-const User = () => {
+const Member = () => {
   
   const theme = useTheme(); // MUI 테마 훅을 사용하여 현재 테마 정보를 가져옴
   const colors = tokens(theme.palette.mode); // 테마 모드 (다크/라이트)에 따라 colors 정의
-  const [users, setUsers] = useState([]); // 팀 데이터를 저장할 상태 추가
+  const [members, setMembers] = useState([]); // 팀 데이터를 저장할 상태 추가
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userList, setUserList] = useState([]);
-  const [userInfo, setUserInfo] = useState({});
+  const [memberList, setMemberList] = useState([]);
+  const [memberInfo, setMemberInfo] = useState({});
 
 
-  // user 데이터를 가져오는 useEffect 훅
+  // member 데이터를 가져오는 useEffect 훅
   useEffect(() => {
 
     // 로그인 여부 확인 API 호출
@@ -26,7 +26,7 @@ const User = () => {
       .then(response => {
         const data = response.data; // 응답 데이터에서 로그인 정보를 추출
         setIsLoggedIn(data.isLoggedIn); // 로그인 상태를 저장하는 state 업데이트
-        setUserInfo({
+        setMemberInfo({
           email: data.email, // 유저의 이메일을 state에 저장
           authority: data.authority, // 유저의 권한을 state에 저장 (예: 관리자, 일반 사용자 등)
           name: data.name // 유저의 이름을 state에 저장
@@ -37,11 +37,11 @@ const User = () => {
         console.error("로그인 상태 확인 중 오류 발생:", error); // 오류 발생 시 콘솔에 에러 메시지 출력
       });
 
-    // user 리스트 불러오기
-    getUserList().then(userList => {
-      console.log(userList); // 가져온 클럽 리스트 데이터를 확인하기 위해 콘솔에 출력
-      setUserList(userList); // 클럽 리스트 데이터를 state에 저장
-      setUsers(userList); // 팀 상태 업데이트
+    // member 리스트 불러오기
+    getMemberList().then(memberList => {
+      console.log(memberList); // 가져온 클럽 리스트 데이터를 확인하기 위해 콘솔에 출력
+      setMemberList(memberList); // 클럽 리스트 데이터를 state에 저장
+      setMembers(memberList); // 팀 상태 업데이트
       setLoading(false);
     })
       .catch(error => {
@@ -121,14 +121,14 @@ const User = () => {
 
   // 로딩 중일 때의 처리
   if (loading) {
-    return <Typography>User Loading...</Typography>; // 로딩 중일 경우 텍스트 표시
+    return <Typography>Member Loading...</Typography>; // 로딩 중일 경우 텍스트 표시
   }
 
 
   // Match 컴포넌트의 JSX 리턴 부분
   return (
     <Box m="20px"> {/* 외부 마진 20px */}
-      <Header title="User" subtitle="Managing the User" /> {/* 제목과 부제목 표시 */}
+      <Header title="Member" subtitle="Managing the Member" /> {/* 제목과 부제목 표시 */}
       <Box
         m="40px 0 0 0" // 상단 마진 40px, 나머지는 0
         height="75vh" // 높이 75%로 설정
@@ -161,9 +161,9 @@ const User = () => {
         {/* DataGrid 컴포넌트: 테이블 렌더링 */}
         <DataGrid
           checkboxSelection // 각 행에 체크박스를 추가
-          rows={users} // 가져온 팀 데이터를 행으로 사용
+          rows={members} // 가져온 팀 데이터를 행으로 사용
           columns={columns} // 정의한 컬럼을 사용
-          getRowId={(row) => row.userId} // 각 행의 ID로 matchId 사용
+          getRowId={(row) => row.memberId} // 각 행의 ID로 matchId 사용
         />
         {/* checkboxSelection: 각 행에 체크박스 추가 */}
       </Box>
@@ -171,4 +171,4 @@ const User = () => {
   );
 };
 
-export default User;
+export default Member;

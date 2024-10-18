@@ -137,8 +137,8 @@ const Sidebar = () => {
 
             {/* domain */}
             <Item
-              title="User"
-              to="/domain/user"
+              title="Member"
+              to="/domain/member"
               icon={<PeopleOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
