@@ -17,9 +17,9 @@ const Club = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [clubList, setClubList] = useState([]);
   const [userInfo, setUserInfo] = useState({});
+  const [selectedIds, setSelectedIds] = useState([]); // 새로운 useState로 선택된 ID들 저장
 
-
-  // Club 데이터를 가져오는 useEffect 훅
+  // Club 데이터를 가져오는 useEffect 훅 // 유저 로그인 확인
   useEffect(() => {
     // 로그인 여부 확인 API 호출
     axios.get('http://localhost:8080/api/auth/status', { withCredentials: true })
@@ -36,6 +36,9 @@ const Club = () => {
       .catch(error => {
         console.error("로그인 상태 확인 중 오류 발생:", error); // 오류 발생 시 콘솔에 에러 메시지 출력
       });
+
+
+
 
     // 구단 리스트 불러오기
     getClubList().then(clubList => {
@@ -93,17 +96,22 @@ const Club = () => {
     }
   ];
 
-
   // 로딩 중일 때의 처리
   if (loading) {
     return <Typography>Club Loading...</Typography>; // 로딩 중일 경우 텍스트 표시
   }
 
+  // DataGrid에서 선택된 행들의 ID 업데이트 핸들러
+  const handleSelectionChange = (selectionModel) => {
+    setSelectedIds(selectionModel); // 선택된 행들의 ID를 상태에 저장
+  };
 
   // Team 컴포넌트의 JSX 리턴 부분
   return (
     <Box m="20px"> {/* 외부 마진 20px */}
+
       <Header title="Club" subtitle="Managing the Club" /> {/* 제목과 부제목 표시 */}
+
       <Box
         m="40px 0 0 0" // 상단 마진 40px, 나머지는 0
         height="75vh" // 높이 75%로 설정
@@ -133,14 +141,15 @@ const Club = () => {
           },
         }}
       >
+
         {/* DataGrid 컴포넌트: 테이블 렌더링 */}
         <DataGrid
           checkboxSelection // 각 행에 체크박스를 추가
           rows={teams} // 가져온 팀 데이터를 행으로 사용
           columns={columns} // 정의한 컬럼을 사용
           getRowId={(row) => row.clubId} // 각 행의 ID로 clubId를 사용
+          onSelectionModelChange={handleSelectionChange} // 선택 변경 이벤트 핸들러 추가
         />
-        {/* checkboxSelection: 각 행에 체크박스 추가 */}
       </Box>
     </Box>
   );
