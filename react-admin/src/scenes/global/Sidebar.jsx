@@ -1,10 +1,9 @@
-import { useState } from "react"; // useState 훅을 불러옴
-import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar"; // ProSidebar와 Menu 컴포넌트를 불러옴
-import { Box, IconButton, Typography, useTheme } from "@mui/material"; // MUI 컴포넌트와 테마 훅을 불러옴
-import { Link } from "react-router-dom"; // 라우팅을 위한 Link 컴포넌트를 불러옴
-import 'react-pro-sidebar/dist/css/styles.css'; // react-pro-sidebar의 스타일을 불러옴
-import { tokens } from "../../theme"; // 테마 색상 토큰을 불러옴
-// 아이콘
+import { useState, useEffect } from "react"; // useEffect 추가
+import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
+import { Box, IconButton, Typography, useTheme } from "@mui/material";
+import { Link, useLocation } from "react-router-dom"; // useLocation 훅 추가
+import 'react-pro-sidebar/dist/css/styles.css';
+import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
@@ -24,15 +23,15 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 
   return (
     <MenuItem
-      active={selected === title} // 현재 선택된 항목을 기반으로 활성화 여부 결정
+      active={selected === title}
       style={{
-        color: colors.grey[100], // 메뉴 아이템의 색상 설정
+        color: colors.grey[100],
       }}
-      onClick={() => setSelected(title)} // 클릭 시 선택된 항목을 업데이트
-      icon={icon} // 메뉴 아이템 아이콘 설정
+      onClick={() => setSelected(title)}
+      icon={icon}
     >
-      <Typography>{title}</Typography> {/* 메뉴 항목 제목 */}
-      <Link to={to} /> {/* 클릭 시 이동할 링크 설정 */}
+      <Typography>{title}</Typography>
+      <Link to={to} />
     </MenuItem>
   );
 };
@@ -41,7 +40,36 @@ const Sidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState("Dashboard");
+  const location = useLocation(); // 현재 경로를 가져옴
+  const [selected, setSelected] = useState("");
+
+  // 새로고침 후에도 현재 페이지에 따라 selected 상태를 설정
+  useEffect(() => {
+    const pathToTitleMap = {
+      "/": "Dashboard",
+      "/domain/member": "Member",
+      "/domain/club": "Club",
+      "/domain/match": "match",
+      "/domain/guest": "Guest",
+      "/contacts": "Contacts Information",
+      "/contacts/conClub": "ContactsClub",
+      "/invoices": "Invoices Balances",
+      "/enroll/member": "Create Member",
+      "/enroll/club": "Create Club",
+      "/enroll/match": "Create Match",
+      "/enroll/guest": "Create Guest",
+      "/calendar": "Calendar",
+      "/faq": "FAQ Page",
+      "/bar": "Bar Chart",
+      "/pie": "Pie Chart",
+      "/line": "Line Chart",
+      "/geography": "Geography Chart",
+    };
+
+    const currentPath = location.pathname;
+    const currentTitle = pathToTitleMap[currentPath] || "Dashboard";
+    setSelected(currentTitle); // 현재 경로에 맞는 title을 선택
+  }, [location.pathname]);
 
   return (
     <Box
@@ -65,7 +93,6 @@ const Sidebar = () => {
     >
       <ProSidebar collapsed={isCollapsed}>
         <Menu iconShape="square">
-          {/* LOGO AND MENU ICON */}
           <MenuItem
             onClick={() => setIsCollapsed(!isCollapsed)}
             icon={isCollapsed ? <MenuOutlinedIcon /> : undefined}
@@ -95,7 +122,7 @@ const Sidebar = () => {
             <Box mb="25px">
               <Box display="flex" justifyContent="center" alignItems="center">
                 <img
-                  alt="profile-user"
+                  alt="Create-User"
                   width="100px"
                   height="100px"
                   src={`../../assets/FootLog-logo.png`}
@@ -135,7 +162,6 @@ const Sidebar = () => {
               Data
             </Typography>
 
-            {/* domain */}
             <Item
               title="Member"
               to="/domain/member"
@@ -164,8 +190,6 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
-            
-            {/* Contacts domain */}
 
             <Item
               title="Contacts Information"
@@ -195,15 +219,42 @@ const Sidebar = () => {
               color={colors.grey[300]}
               sx={{ m: "15px 0 5px 20px" }}
             >
-              Pages
+              Enroll Pages
             </Typography>
+
+
             <Item
-              title="Profile Form"
-              to="/form"
+              title="Create Member"
+              to="/enroll/member"
               icon={<PersonOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
             />
+
+            <Item
+              title="Create Club"
+              to="/enroll/club"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Create Match"
+              to="/enroll/match"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
+            <Item
+              title="Create Guest"
+              to="/enroll/guest"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
             <Item
               title="Calendar"
               to="/calendar"
