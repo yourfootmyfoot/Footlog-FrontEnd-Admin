@@ -16,6 +16,8 @@ import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutl
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
+import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -47,17 +49,23 @@ const Sidebar = () => {
   useEffect(() => {
     const pathToTitleMap = {
       "/": "Dashboard",
+
       "/domain/member": "Member",
       "/domain/club": "Club",
       "/domain/match": "match",
       "/domain/guest": "Guest",
-      "/contacts": "Contacts Information",
-      "/contacts/conClub": "ContactsClub",
-      "/invoices": "Invoices Balances",
+
       "/enroll/member": "Create Member",
       "/enroll/club": "Create Club",
       "/enroll/match": "Create Match",
       "/enroll/guest": "Create Guest",
+
+      "/login": "login",
+
+      "/contacts": "Contacts Information",
+      "/contacts/conClub": "ContactsClub",
+      "/invoices": "Invoices Balances",
+
       "/calendar": "Calendar",
       "/faq": "FAQ Page",
       "/bar": "Bar Chart",
@@ -141,11 +149,23 @@ const Sidebar = () => {
                 <Typography variant="h5" color={colors.greenAccent[500]}>
                   Admin
                 </Typography>
+
               </Box>
             </Box>
+
+
           )}
 
           <Box paddingLeft={isCollapsed ? undefined : "10%"}>
+
+            <Item
+              title="Login"
+              to="/login"
+              icon={<LoginIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+
             <Item
               title="Dashboard"
               to="/"
