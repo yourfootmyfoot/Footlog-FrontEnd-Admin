@@ -2,9 +2,9 @@ import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import { useEffect, useState } from "react"; // React의 useEffect 및 useState 훅 임포트
-import axios from "axios"; // axios를 사용하여 API 요청 처리
 import Header from "../../components/Header";
 import { getMemberList } from './apis/memberAPI';
+import api from '../../config/axiosConfig'
 
 const Member = () => {
   
@@ -22,10 +22,12 @@ const Member = () => {
   useEffect(() => {
 
     // 로그인 여부 확인 API 호출
-    axios.get('http://localhost:8080/api/auth/status', { withCredentials: true })
+    api.get('/api/auth/status', { withCredentials: true })
       .then(response => {
+        
         const data = response.data; // 응답 데이터에서 로그인 정보를 추출
         setIsLoggedIn(data.isLoggedIn); // 로그인 상태를 저장하는 state 업데이트
+        
         setMemberInfo({
           email: data.email, // 유저의 이메일을 state에 저장
           authority: data.authority, // 유저의 권한을 state에 저장 (예: 관리자, 일반 사용자 등)

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"; // React의 useEffect 및 useState 
 import axios from "axios"; // axios를 사용하여 API 요청 처리
 import Header from "../../components/Header"; // 페이지의 제목과 부제목을 보여주는 Header 컴포넌트
 import { getClubList } from './apis/clubAPI';
+// import api from '../../config/axiosConfig'; // axios 인스턴스
 
 // CLub 컴포넌트: CLub 데이터를 테이블로 보여주는 컴포넌트
 const Club = () => {
@@ -23,8 +24,10 @@ const Club = () => {
     // 로그인 여부 확인 API 호출
     axios.get('http://localhost:8080/api/auth/status', { withCredentials: true })
       .then(response => {
+
         const data = response.data; // 응답 데이터에서 로그인 정보를 추출
         setIsLoggedIn(data.isLoggedIn); // 로그인 상태를 저장하는 state 업데이트
+
         setUserInfo({
           email: data.email, // 유저의 이메일을 state에 저장
           authority: data.authority, // 유저의 권한을 state에 저장 (예: 관리자, 일반 사용자 등)

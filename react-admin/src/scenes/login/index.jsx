@@ -3,8 +3,8 @@ import * as yup from "yup"; // yup을 사용하여 유효성 검사를 위한 �
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import { useState } from "react";
-import axios from "axios"; // axios 임포트 추가
 import { useNavigate } from "react-router-dom"; // useNavigate 훅 임포트
+import api from '../../config/axiosConfig'
 
 const Login = () => {
     const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -12,7 +12,7 @@ const Login = () => {
         email: "test@example.com",
         password: "password123"
     });
-    
+
     const [errors, setErrors] = useState({});
     const [loginError, setLoginError] = useState(""); // 로그인 실패 시 오류 메시지를 담을 상태 추가
     const navigate = useNavigate(); // 페이지 이동을 위한 useNavigate 훅 사용
@@ -47,16 +47,20 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         if (validateForm()) {
-            console.log("로그인 폼 제출");
-            console.log("Submitting form with values:", formValues);
+            console.log("로그인 폼 제출 :", formValues);
 
             try {
-                const response = await axios.post("http://localhost:8080/api/auth/login", formValues);
-                console.log("로그인 성공:", response.data);
+                const response = await api.post("/api/auth/login", formValues);
+
+                // json 응답에서 토큰 정보 추출
+                const accessToken = response.data.accessToken;
+                localStorage.setItem('accessToken',accessToken);
 
                 // 로그인 성공 시 루트 페이지로 이동
                 navigate("../domain/member");
+
             } catch (error) {
                 console.error("로그인 오류 발생:", error);
                 // 로그인 실패 시 오류 메시지 설정
@@ -113,15 +117,10 @@ const Login = () => {
                 )}
 
                 <Box display="flex" justifyContent="end" mt="20px">
-                    <Button
-                        type="submit"
-                        color="secondary"
-                        variant="contained"
-                    >
+                    <Button type="submit" color="secondary" variant="contained">
                         로그인
                     </Button>
                 </Box>
-
             </form>
         </Box>
     );
