@@ -16,7 +16,7 @@ import EnrollMember from "./scenes/enroll/member";
 
 import Login from "./scenes/login";
 
-import Invoices from "./scenes/invoices";
+import Ask from "./scenes/ask";
 import Contacts from "./scenes/contacts";
 import ConClub from "./scenes/contacts/conClub";
 import Bar from "./scenes/bar";
@@ -57,7 +57,7 @@ function App() {
               <Route path="/contacts" element={<Contacts />} />
               <Route path="/contacts/conClub" element={<ConClub />} />
 
-              <Route path="/invoices" element={<Invoices />} />
+              <Route path="/" element={<Ask />} />
               <Route path="/enroll/club" element={<EnrollClub />} />
               <Route path="/enroll/guest" element={<EnrollGuest />} />
               <Route path="/enroll/match" element={<EnrollMatch />} />
