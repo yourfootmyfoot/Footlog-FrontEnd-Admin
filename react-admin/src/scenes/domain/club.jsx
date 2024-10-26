@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"; // React의 useEffect 및 useState 
 import axios from "axios"; // axios를 사용하여 API 요청 처리
 import Header from "../../components/Header"; // 페이지의 제목과 부제목을 보여주는 Header 컴포넌트
 import { getClubList } from './apis/clubAPI';
-// import api from '../../config/axiosConfig'; // axios 인스턴스
+import api from '../../config/axiosConfig'; // axios 인스턴스
 
 // CLub 컴포넌트: CLub 데이터를 테이블로 보여주는 컴포넌트
 const Club = () => {
@@ -21,39 +21,40 @@ const Club = () => {
 
   // Club 데이터를 가져오는 useEffect 훅 // 유저 로그인 확인
   useEffect(() => {
-    // 로그인 여부 확인 API 호출
-    axios.get('http://localhost:8080/api/auth/status', { withCredentials: true })
-      .then(response => {
+    const fetchData = async () => {
+      try {
+        // 1. 로그인 상태 확인
 
-        const data = response.data; // 응답 데이터에서 로그인 정보를 추출
-        setIsLoggedIn(data.isLoggedIn); // 로그인 상태를 저장하는 state 업데이트
+        const statusResponse = await api.get('/api/auth/status', { withCredentials: true });
+
+        const data = statusResponse.data;
+
+        setIsLoggedIn(data.isLoggedIn);
 
         setUserInfo({
-          email: data.email, // 유저의 이메일을 state에 저장
-          authority: data.authority, // 유저의 권한을 state에 저장 (예: 관리자, 일반 사용자 등)
-          name: data.name // 유저의 이름을 state에 저장
+          email: data.email,
+          authority: data.authority,
+          name: data.name
         });
-        console.log(data); // 응답 데이터를 콘솔에 출력하여 디버깅용으로 확인
-      })
-      .catch(error => {
-        console.error("로그인 상태 확인 중 오류 발생:", error); // 오류 발생 시 콘솔에 에러 메시지 출력
-      });
 
+        // 2. 로그인된 경우에만 클럽 리스트 조회
+        if (data.isLoggedIn) {
 
+          const clubData = await getClubList();
 
+          setClubList(clubData);
+          setTeams(clubData);
+        }
 
-    // 구단 리스트 불러오기
-    getClubList().then(clubList => {
-      console.log(clubList); // 가져온 클럽 리스트 데이터를 확인하기 위해 콘솔에 출력
-      setClubList(clubList); // 클럽 리스트 데이터를 state에 저장
-      setTeams(clubList); // 팀 상태 업데이트
-      setLoading(false);
-    })
-      .catch(error => {
-        console.error("클럽 리스트 불러오기 오류:", error); // 클럽 리스트 불러오기 중 오류 발생 시 콘솔에 에러 메시지 출력
+      } catch (error) {
+        console.error("로그인 상태 확인 중 오류 발생: ", error);
+      } finally {
         setLoading(false);
-      });
-  }, []); // 컴포넌트가 처음 마운트될 때 한 번 실행
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // DataGrid의 컬럼 정의
   const columns = [
@@ -100,7 +101,7 @@ const Club = () => {
 
   // 로딩 중일 때의 처리
   if (loading) {
-    return <Typography>Club Loading...</Typography>; // 로딩 중일 경우 텍스트 표시
+    return <Typography>Club Loading...</Typography>;
   }
 
 
