@@ -1,4 +1,15 @@
 ## Footlog admin FrontEnd
+
+### Back-End 팀원 소개
+<div align="center">
+
+|                                              정현민                                                |
+|:--------------------------------------------------------------------------------------------------:|
+|<img src = "https://github.com/user-attachments/assets/73fc7216-0dda-418a-900f-2dbcf7a5cfbb" width = "100" height = "100"> |
+|                             [@JungHyeonmin](https://github.com/JungHyeonmin)                             |
+
+</div>
+
 ### 프론트엔드 기술 스택
 
 #### 핵심 기술
