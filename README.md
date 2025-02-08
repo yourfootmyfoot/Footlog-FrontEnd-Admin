@@ -1,5 +1,4 @@
-## Footlog Front Project
-
+## Footlog admin FrontEnd
 ### 프론트엔드 기술 스택
 
 #### 핵심 기술
